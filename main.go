@@ -23,6 +23,10 @@ func main() {
 	e := echo.New()
 	e.Use(echo_middlewares.Logger())
 
+	e.GET("/", func(c echo.Context) error {
+		return c.String(200, "Order service is running!")
+	})
+
 	// Grupo de rutas protegidas
 	protected := e.Group("")
 	protected.Use(middleware.AuthMiddleware)
@@ -31,7 +35,5 @@ func main() {
 	protected.POST("/orders", handlers.CreateOrder)
 	protected.GET("/orders", handlers.GetUserOrders)
 
-	port := "8082"
-
-	e.Logger.Fatal(e.Start(":"+port))
+	e.Logger.Fatal(e.Start(":8082"))
 }
