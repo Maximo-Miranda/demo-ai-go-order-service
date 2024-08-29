@@ -33,6 +33,7 @@ jobs:
             Dockerfile
             go.mod
             go.sum
+            main.go
           outPath: deploy.tar
 
       - name: Deploy Order Service to Skymax Network
