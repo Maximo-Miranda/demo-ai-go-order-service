@@ -31,5 +31,7 @@ func main() {
 	protected.POST("/orders", handlers.CreateOrder)
 	protected.GET("/orders", handlers.GetUserOrders)
 
-	e.Logger.Fatal(e.Start(":8082"))
+	port := "8082"
+
+	e.Logger.Fatal(e.Start(":"+port))
 }
