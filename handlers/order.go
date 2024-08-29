@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"order-service/db"
 	"order-service/models"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -48,8 +49,12 @@ func GetUserOrders(c echo.Context) error {
 }
 
 func validateProductWithProductService(productID uint, token string) (bool, float64) {
-	productServiceURL := "http://localhost:8081/products/" + fmt.Sprint(productID)
-	req, err := http.NewRequest("GET", productServiceURL, nil)
+
+	productServiceUrl := os.Getenv("APP_PRODUCT_SERVICE_URL")
+
+	url := fmt.Sprintf("%s/products/%d", productServiceUrl, productID)
+
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return false, 0
 	}

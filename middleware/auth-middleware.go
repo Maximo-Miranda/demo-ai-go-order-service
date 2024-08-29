@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/labstack/echo/v4"
 )
@@ -31,8 +32,11 @@ func AuthMiddleware(next echo.HandlerFunc) echo.HandlerFunc {
 }
 
 func validateTokenWithUserService(token string) (uint, error) {
-	userServiceURL := "http://localhost:8080/validate"
-	req, err := http.NewRequest("GET", userServiceURL, nil)
+
+	userServiceURL := os.Getenv("APP_USER_SERVICE_URL")
+
+	url := fmt.Sprintf("%s/validate", userServiceURL)
+	req, err := http.NewRequest("GET", url, nil)
 	if err != nil {
 		return 0, fmt.Errorf("error creando la solicitud: %v", err)
 	}
