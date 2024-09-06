@@ -1,0 +1,48 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: order-service
+spec:
+  selector:
+    app: order-service
+  ports:
+  - port: 80
+    targetPort: 8081
+  type: LoadBalancer
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: order-service
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: order-service
+  template:
+    metadata:
+      labels:
+        app: order-service
+    spec:
+      containers:
+      - name: order-service
+        image: mmrianda/order-service:v1
+        resources:
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+        ports:
+        - containerPort: 8082
+        env:
+        - name: DB_CONNECTION_STRING
+          value: postgres://postgres:8snnc9S6xo3fHKMU9Zx@67.205.184.248:5432/order_db?sslmode=disable
+        - name: APP_ENV
+          value: "production"
+        - name: APP_USER_SERVICE_URL
+          value: "http://abfbb29ebed664b798a61a83c3eefcca-1482896081.us-east-2.elb.amazonaws.com"
+        - name: APP_PRODUCT_SERVICE_URL
+          value: "http://a650ecfe8ac7f4be1a51de5685e8b13f-877488849.us-east-2.elb.amazonaws.com"
+        
